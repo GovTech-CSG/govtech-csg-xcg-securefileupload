@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Secure file upload test app</title>
+    </head>
+    <body>
+        <form enctype="multipart/form-data" action="{{ view_path }}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Upload">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=69", "setuptools_scm[toml]>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# Make use of setuptools_scm to dynamically generate the package version from git tags.
+[tool.setuptools_scm]
+
+# Configure isort to be compatible with the "black" code formatter
+[tool.isort]
+profile = "black"
+src_paths = ["src", "tests"]
+honor_noqa = true
+
+[project]
+name = "govtech-csg-xcg-securefileupload"
+dynamic = ["version"] # Set the version dynamically based on the most recent git tag (uses setuptools_scm)
+description = "XCG middleware to prevent malicious file uploads."
+readme = "README.md"
+requires-python = ">=3.8" # To align with Django 4.1 and above's requirement
+dependencies = [
+    "django ~= 4.1",
+    "python-magic; platform_system != 'Windows'",
+    "python-magic-bin == 0.4.14; platform_system == 'Windows'",
+    "exifread",
+    "Pillow",
+    "clamd",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+]
+
+[project.optional-dependencies]
+yara = [
+    "yara-python == 4.2.3; platform_system == 'Windows' or platform_system == 'Darwin'",
+    "yara-python; platform_system != 'Windows' and platform_system != 'Darwin'",
+]
+quicksand = [
+    # NOTE: Apparently we can also just do "govtech-csg-xcg-securefileupload[yara]"
+    # because pip should be able to resolve such "self-dependencies". But worth looking
+    # into in the future.
+    "yara-python == 4.2.3; platform_system == 'Windows' or platform_system == 'Darwin'",
+    "yara-python; platform_system != 'Windows' and platform_system != 'Darwin'",
+    "quicksand",
+]
+
+[project.urls]
+Homepage = "https://xcg.tech.gov.sg"
+Documentation = "https://xcg.tech.gov.sg"
+Repository = "https://github.com/GovTech-CSG/govtech-csg-xcg-securefileupload"

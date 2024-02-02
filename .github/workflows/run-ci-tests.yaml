@@ -1,0 +1,41 @@
+permissions:
+  contents: read
+name: run-ci-tests
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: actions/setup-python@v5.0.0
+        with:
+          python-version: ^3.8
+      - uses: pre-commit/action@v3.0.0
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Setup Python
+        uses: actions/setup-python@v5.0.0
+        with:
+          python-version: ^3.8
+          cache: 'pip'
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt ".[yara,quicksand]"
+      - name: Install ClamAV  # NOTE: Install this first as the daemon takes a few seconds to start properly
+        run: |
+          sudo apt-get update >/dev/null
+          sudo apt-get install clamav clamav-daemon >/dev/null
+          sudo systemctl stop clamav-freshclam.service && sudo freshclam
+          sudo systemctl start clamav-daemon.service
+      - name: Setup YARA cache
+        uses: actions/cache@v3
+        with:
+          key: securefileupload-yara-cache-key
+          path: /home/runner/vcpkg-cache
+      - name: Install YARA
+        run: |
+          mkdir /home/runner/vcpkg-cache || echo "Cache folder already exists"
+          vcpkg install yara --binarysource=files,/home/runner/vcpkg-cache,readwrite
+      - name: Run unit tests
+        run: cd tests/ && /bin/bash run_all_tests.sh

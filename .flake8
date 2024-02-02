@@ -1,0 +1,4 @@
+[flake8]
+# For consistency with the "black" formatter
+extend-ignore = E203, E501, W503
+max-line-length = 88
