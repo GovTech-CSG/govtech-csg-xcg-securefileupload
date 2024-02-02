@@ -1,4 +1,4 @@
-# XCG securefileupload module
+# govtech-csg-xcg-securefileupload
 
 This package belongs to the **eXtended Code Guardrails (XCG)** project, which consists of a series of packages that harden the Django web framework to prevent common web application vulnerabilities.
 
