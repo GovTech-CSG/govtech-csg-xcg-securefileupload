@@ -1,5 +1,7 @@
 # govtech-csg-xcg-securefileupload
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8504/badge)](https://www.bestpractices.dev/projects/8504)
+
 This package belongs to the **eXtended Code Guardrails (XCG)** project, which consists of a series of packages that harden the Django web framework to prevent common web application vulnerabilities.
 
 Specifically, the Secure File Upload package contains a Django middleware to validate user file uploads, detect specially crafted media files with malicious intent and block them afterward.
